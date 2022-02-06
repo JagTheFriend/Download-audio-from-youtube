@@ -13,6 +13,7 @@ import { dbConnection } from '@databases';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import path from 'path';
 
 class App {
   public app: express.Application;
@@ -53,6 +54,10 @@ class App {
   }
 
   private initializeMiddlewares() {
+    this.app.set('views', path.join(__dirname, '/views'));
+    this.app.set('view engine', 'ejs');
+    this.app.use(express.static(path.join(__dirname, '/public')));
+
     this.app.use(morgan(LOG_FORMAT, { stream }));
     this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }));
     this.app.use(hpp());
