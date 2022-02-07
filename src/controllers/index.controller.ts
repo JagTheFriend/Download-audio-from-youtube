@@ -34,6 +34,15 @@ class IndexController {
       next(error);
     }
   };
+
+  public downloadSong = async (req: Request, res: Response, next: NextFunction) => {
+    const id: string = req.query.id as string;
+    try {
+      res.send(id);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default IndexController;

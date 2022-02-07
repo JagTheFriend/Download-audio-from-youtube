@@ -14,6 +14,7 @@ class IndexRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.indexController.index);
     this.router.post(`${this.path}getSong`, this.indexController.searchSong);
+    this.router.get(`${this.path}download/:id`, this.indexController.searchSong);
   }
 }
 
