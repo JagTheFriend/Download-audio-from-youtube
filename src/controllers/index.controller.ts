@@ -24,10 +24,8 @@ class IndexController {
         dataToSend.push({
           nextPageToken: data.nextPageToken,
           videoId: key.id.videoId,
-          publishedAt: key.snippet.publishedAt,
           title: key.snippet.title,
           description: key.snippet.description,
-          channelTitle: key.snippet.channelTitle,
           thumbnailLink: key.snippet.thumbnails.medium.url,
         });
       }
