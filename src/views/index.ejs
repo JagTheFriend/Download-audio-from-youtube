@@ -12,11 +12,42 @@
 
 <div class="container" id="main-container">
   <div class="input-group mb-3" style="padding-top:4%;">
-    <input type="text" class="form-control" placeholder="Name of the song" aria-label="Name of the song" aria-describedby="basic-addon2">
+    <input id="songName" type="text" class="form-control" placeholder="Name of the song"
+      aria-label="Name of the song" aria-describedby="Name of the song" required>
   </div>
-
-  <% if (locals.data?.length !== 0) { %>
-    <%= "hi" %>
-  <% } %>
-
+  <button class="btn btn-primary" onclick="searchVideo()">Search</button>
+  <div id="response">
+    <div class="row">
+      <div class="col">Column</div>
+      <div class="col">Column</div>
+      <div class="col">Column</div>
+      <div class="w-100"></div>
+      <div class="col">Column</div>
+      <div class="col">Column</div>
+      <div class="col">Column</div>
+    </div>
+  </div>
 </div>
+
+<script>
+  async function searchVideo() {
+    const videoName = document.getElementById("songName").value;
+    const options = {
+      method: "POST",
+
+      // Adding body or contents to send
+      body: JSON.stringify({song: videoName}),
+
+      // Adding headers to the request
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    }
+    if (videoName === "") return alert("Please enter the name of the song!");
+    const response = await fetch(`${window.location.href}getSong`, options);
+    const data = await response.json();
+
+    document.getElementById("response")
+    console.log(data);
+  }
+</script>
