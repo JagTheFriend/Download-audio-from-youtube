@@ -65,8 +65,7 @@ class IndexController {
     try {
       res.header('Content-Disposition', 'attachment; filename="video.mp4"');
       ytdl(`https://www.youtube.com/watch?v=${id}`, {
-          //@ts-ignore
-          format: 'mp4'
+        filter: 'audioonly'
       }).pipe(res);
     } catch (error) {
       next(error);
