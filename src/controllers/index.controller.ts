@@ -62,10 +62,11 @@ class IndexController {
 
   public downloadSong = async (req: Request, res: Response, next: NextFunction) => {
     const id: string = req.query.id as string;
+    const fileName: string = req.query.fileName as string;
     try {
-      res.header('Content-Disposition', 'attachment; filename="video.mp4"');
+      res.header('Content-Disposition', `attachment; filename="${fileName}.mp3"`);
       ytdl(`https://www.youtube.com/watch?v=${id}`, {
-        filter: 'audioonly'
+        filter: 'audioonly',
       }).pipe(res);
     } catch (error) {
       next(error);
