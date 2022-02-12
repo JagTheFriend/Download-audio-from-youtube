@@ -2,6 +2,7 @@
 import { YOUTUBE_API_KEY } from '@config';
 import { NextFunction, Request, Response } from 'express';
 import fetch from 'cross-fetch';
+import ytdl from 'ytdl-core';
 
 const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${YOUTUBE_API_KEY}&type=video&maxResults=18&q=`;
 
@@ -62,7 +63,11 @@ class IndexController {
   public downloadSong = async (req: Request, res: Response, next: NextFunction) => {
     const id: string = req.query.id as string;
     try {
-      res.send(id);
+      res.header('Content-Disposition', 'attachment; filename="video.mp4"');
+      ytdl(`https://www.youtube.com/watch?v=${id}`, {
+          //@ts-ignore
+          format: 'mp4'
+      }).pipe(res);
     } catch (error) {
       next(error);
     }
