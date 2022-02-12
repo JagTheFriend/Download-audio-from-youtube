@@ -1,1 +1,78 @@
-<h1>Hello World!-</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>
+        Download songs for free!
+    </title>
+</head>
+<style>
+    .center-element {
+        color: red;
+    }
+</style>
+
+
+<div class="container" id="main-container">
+    <div class="input-group mb-3" style="padding-top:4%;">
+        <input id="songName" type="text" class="form-control" placeholder="Name of the song"
+            aria-label="Name of the song" aria-describedby="Name of the song" required>
+    </div>
+    <button class="btn btn-primary" onclick="searchVideo()">Search</button>
+    <div id="response">
+        <div class="row" id="row"></div>
+    </div>
+</div>
+
+<script>
+    async function searchVideo() {
+        document.getElementById("row").innerHTML = ``;
+        const videoName = document.getElementById("songName").value;
+        const options = {
+            method: "POST",
+            // Adding body or contents to send
+            body: JSON.stringify({ song: videoName }),
+            // Adding headers to the request
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }
+        if (videoName === "") return alert("Please enter the name of the song!");
+        const response = await fetch(`${window.location.href}getSong`, options);
+        const data = await response.json();
+        showData(data);
+    }
+    function showData(data) {
+        const row = document.getElementById("row");
+        for (element of data) {
+            row.innerHTML += `
+        <div class="card" style="width: 18rem;">
+          <img style="padding-top: 10px;" class="card-img-top" src="${element.thumbnailLink}" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">Title: ${element.title}</h5>
+            <p class="card-text">Description: ${element.description}</p>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"> <a target="_blank" href="https://www.youtube.com/watch?v=${element.videoId}" class="card-link">Video link </a> </li>
+              <li class="list-group-item"> <a target="_blank" href="${window.location.href}download?id=${element.videoId}" class="card-link">Download link </a> </li>
+            </ul>
+          </div>
+        </div`;
+        }
+    }
+</script>
+
+</html>
