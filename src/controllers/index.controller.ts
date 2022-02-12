@@ -1,9 +1,33 @@
-import { ResponseReceived, VideoFormat } from '@interfaces/video.interface';
+// import { ResponseReceived, VideoFormat } from '@interfaces/video.interface';
 import { YOUTUBE_API_KEY } from '@config';
 import { NextFunction, Request, Response } from 'express';
 import fetch from 'node-fetch';
 
 const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${YOUTUBE_API_KEY}&type=video&maxResults=18&q=`;
+
+export interface VideoFormat {
+  nextPageToken: string;
+  videoId: string;
+  title: string;
+  description: string;
+  thumbnailLink: string;
+}
+
+export interface ResponseReceived {
+  nextPageToken: string;
+  items: [
+    {
+      id: { videoId: string };
+      snippet: {
+        title: string;
+        description: string;
+        thumbnails: {
+          medium: { url: string };
+        };
+      };
+    },
+  ];
+}
 
 class IndexController {
   public index = (req: Request, res: Response, next: NextFunction) => {
