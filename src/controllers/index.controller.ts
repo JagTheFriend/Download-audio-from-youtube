@@ -64,9 +64,10 @@ class IndexController {
     const id: string = req.query.id as string;
     const fileName: string = req.query.fileName as string;
     try {
-      res.header('Content-Disposition', `attachment; filename="${fileName}.mp3"`);
+      res.header('Content-Disposition', `attachment; filename="${fileName.replace(/[^\x00-\x7F]/g, "")}.mp3"`);
       ytdl(`https://www.youtube.com/watch?v=${id}`, {
         filter: 'audioonly',
+        requestOptions: { timeout: 360 }
       }).pipe(res);
     } catch (error) {
       next(error);
