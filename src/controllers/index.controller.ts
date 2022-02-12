@@ -1,7 +1,7 @@
 // import { ResponseReceived, VideoFormat } from '@interfaces/video.interface';
 import { YOUTUBE_API_KEY } from '@config';
 import { NextFunction, Request, Response } from 'express';
-import fetch from 'node-fetch';
+import fetch from 'cross-fetch';
 
 const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${YOUTUBE_API_KEY}&type=video&maxResults=18&q=`;
 
