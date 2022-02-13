@@ -33,6 +33,7 @@ export interface ResponseReceived {
 class IndexController {
   public index = (req: Request, res: Response, next: NextFunction) => {
     try {
+      res.header('Access-Control-Allow-Origin', '*');
       res.render('index');
     } catch (error) {
       next(error);
