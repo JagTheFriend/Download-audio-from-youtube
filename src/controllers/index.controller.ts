@@ -6,6 +6,15 @@ import ytdl from 'ytdl-core';
 
 const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${YOUTUBE_API_KEY}&type=video&maxResults=18&q=`;
 
+function sendResponse(id: string, res: Response) {
+  return Promise.resolve(
+    ytdl(`https://www.youtube.com/watch?v=${id}`, {
+      filter: 'audioonly',
+      requestOptions: { timeout: 360 },
+    }).pipe(res),
+  );
+}
+
 class IndexController {
   public index = (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -41,11 +50,8 @@ class IndexController {
     const id: string = req.query.id as string;
     const fileName: string = req.query.fileName as string;
     try {
-      res.header('Content-Disposition', `attachment; filename="${fileName.replace(/[^\x00-\x7F]/g, "")}.mp3"`);
-      ytdl(`https://www.youtube.com/watch?v=${id}`, {
-        filter: 'audioonly',
-        requestOptions: { timeout: 360 }
-      }).pipe(res);
+      res.header('Content-Disposition', `attachment; filename="${fileName.replace(/[^\x00-\x7F]/g, '')}.mp3"`);
+      sendResponse(id, res);
     } catch (error) {
       next(error);
     }
