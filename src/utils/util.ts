@@ -1,4 +1,4 @@
-import { DataToSend, ResponseReceived, VideoFormat } from '@/interfaces/video.interface';
+import { DataToSend, ResponseReceived, ValidityCheckOnly, VideoFormat } from '@/interfaces/video.interface';
 import { YOUTUBE_API_KEY } from '@config';
 import fetch from 'cross-fetch';
 
@@ -33,7 +33,7 @@ export const isEmpty = (value: string | number | object): boolean => {
  */
 export async function checkValidity(videoId: string): Promise<boolean> {
   const response = await fetch(validityCheckUrl + videoId);
-  const data = await response.json();
+  const data: ValidityCheckOnly = await response.json();
   return data.pageInfo.totalResults !== 0;
 }
 
