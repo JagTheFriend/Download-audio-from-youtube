@@ -29,3 +29,19 @@ export interface DataToSend {
   description: string;
   thumbnailLink: string;
 }
+
+export interface ValidityCheckOnly {
+  kind: string;
+  etag: string;
+  items: [
+    {
+      kind?: string;
+      etag?: string;
+      id?: string;
+    },
+  ];
+  pageInfo: {
+    totalResults: number;
+    resultsPerPage: number;
+  };
+}
