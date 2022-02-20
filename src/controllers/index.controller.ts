@@ -3,8 +3,10 @@ import { YOUTUBE_API_KEY } from '@config';
 import { NextFunction, Request, Response } from 'express';
 import fetch from 'cross-fetch';
 import ytdl from 'ytdl-core';
+import { check } from 'prettier';
 
 const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${YOUTUBE_API_KEY}&type=video&maxResults=18&q=`;
+const url2 = `https://www.googleapis.com/youtube/v3/videos?part=id&key=${YOUTUBE_API_KEY}&id=`;
 
 function sendResponse(id: string, res: Response) {
   return Promise.resolve(
@@ -13,6 +15,12 @@ function sendResponse(id: string, res: Response) {
       requestOptions: { timeout: 360 },
     }).pipe(res),
   );
+}
+
+async function checkValidity(videoId: string) {
+  const response = await fetch(url2 + videoId);
+  const data = await response.json();
+  return data.pageInfo.totalResults !== 0;
 }
 
 class IndexController {
@@ -49,6 +57,10 @@ class IndexController {
   public downloadSong = async (req: Request, res: Response, next: NextFunction) => {
     const id: string = req.query.id as string;
     const fileName: string = req.query.fileName as string;
+    if (!(await checkValidity(id))) {
+      res.redirect('/');
+      return;
+    }
     try {
       res.header('Content-Disposition', `attachment; filename="${fileName.replace(/[^\x00-\x7F]/g, '')}.mp3"`);
       sendResponse(id, res);
